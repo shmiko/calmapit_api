@@ -12,7 +12,7 @@ var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
 var app = express();
 // Load client secrets from a local file.
 
-app.get('/auth', function(req, res) {
+// app.get('/auth', function(req, res) {
   fs.readFile('client_secret.json', function processClientSecrets(err, content) {
     if (err) {
       console.log('Error loading client secret file: ' + err);
@@ -22,7 +22,7 @@ app.get('/auth', function(req, res) {
     // Google Calendar API.
     authorize(JSON.parse(content), listEvents);
   });
-});
+// });
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
  * given callback function.
@@ -44,7 +44,7 @@ function authorize(credentials, callback) {
     } else {
       oauth2Client.credentials = JSON.parse(token);
       callback(oauth2Client);
-      res.redirect('/');
+      // res.redirect('/');
     }
   });
 }
@@ -104,17 +104,19 @@ function storeToken(token) {
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
- app.get('/', function(req, res) {
+ var now = new Date('2015-11-10');
+ var twoMonthsFromNow = new Date('2016-01-25');
+ // app.get('/', function(req, res) {
     function listEvents(auth) {
       var calendar = google.calendar('v3');
       calendar.events.list({
         auth: auth,
         calendarId: '15dcnca6hga2rqna9f651qc5d0@group.calendar.google.com',
-        timeMin: (new Date()).toISOString(),
+        timeMin: now.toISOString(),
         maxResults: 10,
         singleEvents: true,
         orderBy: 'startTime'
-      }, function(err, response) {
+      }, function(err, response) { 
         if (err) {
           console.log('The API returned an error: ' + err);
           return;
@@ -128,17 +130,17 @@ function storeToken(token) {
             var event = events[i];
             var start = event.start.dateTime || event.start.date;
             console.log('%s - %s', start, event.summary);
-            res.send(events);
+            // res.send(events);
           }
         }
       });
     }
-  });
+  // });
 
 
- var server = app.listen(3000, function() {
-  var host = server.address().address;
-  var port = server.address().port;
+//  var server = app.listen(3000, function() {
+//   var host = server.address().address;
+//   var port = server.address().port;
 
-  console.log('Listening at http://%s:%s', host, port);
-});
+//   console.log('Listening at http://%s:%s', host, port);
+// });

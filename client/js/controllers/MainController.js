@@ -20,13 +20,17 @@ app.controller('MainController', ['$scope','$googleCalendar','$config','Auth','$
 		animation: 'am-fade-and-scale',
 		scope: $scope
 	});
-
+		var now = new Date('2015-11-10');
+ 		var twoMonthsFromNow = new Date('2016-01-25');
 	//================================================================================
 	// Scope Functions
 	//================================================================================
 	$scope.getEvents = function() {
+		
+ 
 		$googleCalendar.getEvents().then(function(events) {
-			console.log(events);
+			console.log("events are ",events);
+			console.log('Number of events: ' + events.length);
 			$scope.events = events;
 		});
 	};

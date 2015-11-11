@@ -5,7 +5,8 @@
 var express = require('express');
 var config  = require('../config');
 var gcal    = require('google-calendar');
-
+var startnow = new Date('2015-11-10T00:00:00+11:00');
+var now = new Date('2016-01-27T00:00:00+11:00');
 //================================================================================
 // Properties
 //================================================================================
@@ -29,11 +30,34 @@ router.use(function(req, res, next) {
 
 router.get('/events', function(req, res, next) {
     var calendar = new gcal.GoogleCalendar(req.session.accessToken);
-    calendar.events.list(req.session.calendarId, {'timeMin': new Date().toISOString()}, function(err, eventList) {
+    // calendar.events.list(req.session.calendarId, {'timeMin': new Date().toISOString()}, function(err, eventList) {
+    //     if(err) return next(err);
+
+    //     res.send(JSON.stringify(eventList, null, '\t'));
+    // });
+    // calendar.events.list('15dcnca6hga2rqna9f651qc5d0@group.calendar.google.com',
+      // {'timeMin': now.toISOString()}, function(err, eventList) {
+    
+    //     if(err) return next(err);
+
+    //     res.send(JSON.stringify(eventList, null, '\t'));
+    // });
+
+    calendar.events.list('15dcnca6hga2rqna9f651qc5d0@group.calendar.google.com',
+    {   'timeMin': startnow.toISOString(),
+        'timeMax': now.toISOString(),
+          'maxResults': 100,
+          'singleEvents': true,
+          // 'sortorder': 'descending'
+          'orderBy': 'startTime',
+          'timeZone': 'Australia%2FSydney' //'America/Los_Angeles' //
+      }, function(err, eventList) { 
+        
         if(err) return next(err);
 
         res.send(JSON.stringify(eventList, null, '\t'));
-    });
+
+      });
 
 });
 
